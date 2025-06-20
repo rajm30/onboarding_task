@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy } from "react";
 import Home from "./Pages/Home";
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
-import Productlist from "./Pages/Productlist";
+const ProductList = lazy(() => import("./Pages/Productlist"));
 import ProtectedRoute from "./components/ProtectedRoute";
 import ViewDetails from "./Pages/ViewDetails";
 import { ProductProvider } from "./context/Product";
 import Cart from "./Pages/Cart";
+import { Component, Suspense } from "react";
+import Loading from "./components/Loading";
 
 function App() {
   return (
@@ -21,9 +24,11 @@ function App() {
           <Route
             path="/Productlist"
             element={
-              <ProtectedRoute>
-                <Productlist />
-              </ProtectedRoute>
+              <Suspense fallback={<Loading />}>
+                <ProtectedRoute>
+                  <ProductList />
+                </ProtectedRoute>
+              </Suspense>
             }
           />
         </Routes>
